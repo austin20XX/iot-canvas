@@ -1,15 +1,21 @@
 #include "wifi_secrets.h"
 #include <WiFiNINA.h>
 #include <SPI.h>
-
+#include <WebThingAdapter.h>
+#include <Thing.h>
 
 // PORT DEFINITIONS
-#define SPIWIFI SPI
-#define AIRLIFT_CS 10 // Chip select gpio
-#define AIRLIFT_BUSY 7
-#define AIRLIFT_RESET 5
-#define AIRLIFT_GPIO0 -1 // Not connected
+#define SPIWIFI         SPI
+#define AIRLIFT_CS      10 // Chip select gpio
+#define AIRLIFT_BUSY    7
+#define AIRLIFT_RESET   5
+#define AIRLIFT_GPIO0   -1 // Not connected
 
+#define LED_STRIP_PIN 9
+
+WebThingAdapter *adapter;
+const char canvasTypes[] = ["Light", "OnOffSwitch", "ColorControl", nullptr];
+ThingDevice canvas("urn:dev:canvas-by-tae", "Anime Canvas", canvasTypes);
 
 void setup() {
   // put your setup code here, to run once:
@@ -19,8 +25,23 @@ void setup() {
     delay(10);
   }
 
+  connectToWifi();
+  
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
+
+void connectCanvasToWebThingServer() {
+  adapter = new WebThingAdapter("Lightning Canvas", WiFi.localIP());
+
+}
+
+void connectToWifi() {
   // This is an added function in the Adafruit WiFiNINA library
-  // Needed ofc because the wifi is coming from is a breakout
+  // Needed ofc because the wifi is coming from a breakout
   WiFi.setPins(AIRLIFT_CS, AIRLIFT_BUSY, AIRLIFT_RESET, AIRLIFT_GPIO0, &SPIWIFI);
 
   // WL_NO_MODULE and WL_NO_SHIELD are equivalent
@@ -47,9 +68,4 @@ void setup() {
   Serial.println(WiFi.SSID());
   Serial.print("IP Address is: ");
   Serial.println(WiFi.localIP());
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
 }
