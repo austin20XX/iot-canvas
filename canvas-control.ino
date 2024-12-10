@@ -1,8 +1,9 @@
+#define ARDUINO_UNO
+
 #include "wifi_secrets.h"
 #include <WiFiNINA.h>
 #include <SPI.h>
 #include <WebThingAdapter.h>
-#include <Thing.h>
 
 // PORT DEFINITIONS
 #define SPIWIFI         SPI
@@ -14,7 +15,7 @@
 #define LED_STRIP_PIN 9
 
 WebThingAdapter *adapter;
-const char canvasTypes[] = ["Light", "OnOffSwitch", "ColorControl", nullptr];
+const char *canvasTypes[] = {"Light", "OnOffSwitch", "ColorControl", nullptr};
 ThingDevice canvas("urn:dev:canvas-by-tae", "Anime Canvas", canvasTypes);
 
 void setup() {
