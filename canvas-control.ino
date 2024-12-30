@@ -15,8 +15,12 @@
 #define LED_STRIP_PIN 9
 
 WebThingAdapter *adapter;
-const char *canvasTypes[] = {"Light", "OnOffSwitch", "ColorControl", nullptr};
+const char *canvasTypes[] = {"Light", "ColorControl", nullptr};
 ThingDevice canvas("urn:dev:canvas-by-tae", "Anime Canvas", canvasTypes);
+
+//** Thing Properties Declarations */
+
+ThingProperty lightsOn("on", "Whether the canvas is in a static on state.", BOOLEAN, "OnOffProperty");
 
 void setup() {
   // put your setup code here, to run once:
@@ -27,6 +31,11 @@ void setup() {
   }
 
   connectToWifi();
+
+  adapter = new WebThingAdapter("led-lamp", WiFi.localIP());
+
+  canvas.description = "The electric floating canvas in my dining room. Greyscale";
+  canvas.addProperty(&lightsOn);
   
 }
 
