@@ -21,10 +21,12 @@ ThingDevice canvas("urn:dev:canvas-by-tae", "Anime Canvas", canvasTypes);
 //** Thing Properties Declarations */
 
 ThingProperty lightsOn("on", "Whether the canvas is in a static on state.", BOOLEAN, "OnOffProperty");
+bool lastOn = false;
 
 void setup() {
   // put your setup code here, to run once:
   pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(9600);
   while(!Serial) {
     Serial.println("Serial connecting..."); // Wait for serial port to connect. Can't communicate otherwise?
@@ -35,19 +37,36 @@ void setup() {
 
   adapter = new WebThingAdapter("led-lamp", WiFi.localIP());
 
-  canvas.description = "The electric floating canvas in my dining room. Greyscale";
+  canvas.description = "The electric floating canvas";
+  lightsOn.title = "Light Strip";
+
   canvas.addProperty(&lightsOn);
   
+  adapter->addDevice(&canvas);
+  adapter->begin();
+
+    Serial.println("HTTP server started");
+    Serial.print("http://");
+    Serial.print(WiFi.localIP());
+    Serial.print("/things/");
+    Serial.println(canvas.id);
+
+    ThingPropertyValue initialOn = {.boolean = false};
+    lightsOn.setValue(initialOn);
+    (void)lightsOn.changedValueOrNull();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  adapter->update();
 
-}
+  bool on = lightsOn.getValue().boolean;
 
-void connectCanvasToWebThingServer() {
-  adapter = new WebThingAdapter("Lightning Canvas", WiFi.localIP());
-
+    if (on) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    } else {
+    digitalWrite(LED_BUILTIN, LOW);
+    }
 }
 
 void connectToWifi() {
