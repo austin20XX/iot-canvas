@@ -58,15 +58,15 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  adapter->update();
+  // adapter->update();
 
-  bool on = lightsOn.getValue().boolean;
+  // bool on = lightsOn.getValue().boolean;
 
-    if (on) {
-    digitalWrite(LED_BUILTIN, HIGH);
-    } else {
-    digitalWrite(LED_BUILTIN, LOW);
-    }
+  //   if (on) {
+  //   digitalWrite(LED_BUILTIN, HIGH);
+  //   } else {
+  //   digitalWrite(LED_BUILTIN, LOW);
+  //   }
 }
 
 void connectToWifi() {
