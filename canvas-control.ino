@@ -24,6 +24,7 @@ ThingProperty lightsOn("on", "Whether the canvas is in a static on state.", BOOL
 
 void setup() {
   // put your setup code here, to run once:
+  pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(9600);
   while(!Serial) {
     Serial.println("Serial connecting..."); // Wait for serial port to connect. Can't communicate otherwise?
