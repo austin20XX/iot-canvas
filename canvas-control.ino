@@ -26,12 +26,11 @@ bool lastOn = false;
 void setup() {
   // put your setup code here, to run once:
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(9600);
-  while(!Serial) {
-    Serial.println("Serial connecting..."); // Wait for serial port to connect. Can't communicate otherwise?
-    delay(10);
-  }
+  // while(!Serial) {
+  //   Serial.println("Serial connecting..."); // Wait for serial port to connect. Can't communicate otherwise?
+  //   delay(10);
+  // }
 
   connectToWifi();
 
@@ -45,31 +44,33 @@ void setup() {
   adapter->addDevice(&canvas);
   adapter->begin();
 
-    Serial.println("HTTP server started");
-    Serial.print("http://");
-    Serial.print(WiFi.localIP());
-    Serial.print("/things/");
-    Serial.println(canvas.id);
+  Serial.println("HTTP server started");
+  Serial.print("http://");
+  Serial.print(WiFi.localIP());
+  Serial.print("/things/");
+  Serial.println(canvas.id);
 
-    ThingPropertyValue initialOn = {.boolean = false};
-    lightsOn.setValue(initialOn);
-    (void)lightsOn.changedValueOrNull();
+  digitalWrite(LED_BUILTIN, LOW);
+  ThingPropertyValue initialOn = {.boolean = false};
+  lightsOn.setValue(initialOn);
+  (void)lightsOn.changedValueOrNull();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  // adapter->update();
+  adapter->update();
 
-  // bool on = lightsOn.getValue().boolean;
+  bool on = lightsOn.getValue().boolean;
 
-  //   if (on) {
-  //   digitalWrite(LED_BUILTIN, HIGH);
-  //   } else {
-  //   digitalWrite(LED_BUILTIN, LOW);
-  //   }
+    if (on) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    } else {
+    digitalWrite(LED_BUILTIN, LOW);
+    }
 }
 
 void connectToWifi() {
+    digitalWrite(LED_BUILTIN, HIGH);
   // This is an added function in the Adafruit WiFiNINA library
   // Needed ofc because the wifi is coming from a breakout
   WiFi.setPins(AIRLIFT_CS, AIRLIFT_BUSY, AIRLIFT_RESET, AIRLIFT_GPIO0, &SPIWIFI);
@@ -98,4 +99,6 @@ void connectToWifi() {
   Serial.println(WiFi.SSID());
   Serial.print("IP Address is: ");
   Serial.println(WiFi.localIP());
+
+  digitalWrite(LED_BUILTIN, LOW);
 }

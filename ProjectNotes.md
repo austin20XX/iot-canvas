@@ -15,4 +15,4 @@
 
 ## General Learnings
   When a program is monitoring the serial port of the device, uploads fail. Commonly happens to me when I'm listening through VS Code Serial Monitor, just stop monitoring to fix.
-
+  Waiting for Serial connection hangs your code when not connected to a PC(or any device with serial connection). Solution I think could be #ifndef WAIT_FOR_SERIAL macro? Allow for easy switching in and out instead of commenting out code
