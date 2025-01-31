@@ -16,7 +16,7 @@
 
 WebThingAdapter *adapter;
 const char *canvasTypes[] = {"Light", "ColorControl", nullptr};
-ThingDevice canvas("urn:dev:canvas-by-tae", "Anime Canvas", canvasTypes);
+ThingDevice canvas("urn:michigan-ave:canvas-by-tae", "Anime Canvas", canvasTypes);
 
 //** Thing Properties Declarations */
 
