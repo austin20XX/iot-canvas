@@ -4,6 +4,7 @@
 #include <WiFiNINA.h>
 #include <SPI.h>
 #include <WebThingAdapter.h>
+#include <Adafruit_NeoPixel.h>
 
 // PORT DEFINITIONS
 #define SPIWIFI         SPI
@@ -12,11 +13,14 @@
 #define AIRLIFT_RESET   5
 #define AIRLIFT_GPIO0   -1 // Not connected
 
-#define LED_STRIP_PIN 9
+#define LED_STRIP_PIN 2
+#define NUM_PIXELS 10
 
 WebThingAdapter *adapter;
 const char *canvasTypes[] = {"Light", "ColorControl", nullptr};
 ThingDevice canvas("urn:michigan-ave:canvas-by-tae", "Anime Canvas", canvasTypes);
+
+Adafruit_NeoPixel ws2812b(NUM_PIXELS, LED_STRIP_PIN, NEO_GRB + NEO_KHZ800);
 
 //** Thing Properties Declarations */
 
@@ -53,7 +57,13 @@ void setup() {
   digitalWrite(LED_BUILTIN, LOW);
   ThingPropertyValue initialOn = {.boolean = false};
   lightsOn.setValue(initialOn);
+  // Casted b/c this can actually return nullptr?
   (void)lightsOn.changedValueOrNull();
+
+
+  ws2812b.begin();
+  ws2812b.setPixelColor(0, ws2812b.Color(0, 127, 0));
+  ws2812b.show();
 }
 
 void loop() {
