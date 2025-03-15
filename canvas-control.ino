@@ -54,15 +54,15 @@ void setup() {
   Serial.print("/things/");
   Serial.println(canvas.id);
 
-  digitalWrite(LED_BUILTIN, LOW);
   ThingPropertyValue initialOn = {.boolean = false};
   lightsOn.setValue(initialOn);
-  // Casted b/c this can actually return nullptr?
+  // Casted b/c this can actually return nullptr? 
+  // Call this because we called setValue
   (void)lightsOn.changedValueOrNull();
 
 
   ws2812b.begin();
-  ws2812b.setPixelColor(0, ws2812b.Color(0, 127, 0));
+  ws2812b.clear();
   ws2812b.show();
 }
 
@@ -73,10 +73,20 @@ void loop() {
   bool on = lightsOn.getValue().boolean;
 
     if (on) {
-    digitalWrite(LED_BUILTIN, HIGH);
+    turnStripOn();
     } else {
-    digitalWrite(LED_BUILTIN, LOW);
+      turnStripOff();
     }
+}
+
+void turnStripOn() {
+  ws2812b.fill(ws2812b.Color(127,127,127), 0, NUM_PIXELS);
+  ws2812b.show();
+}
+
+void turnStripOff() {
+  ws2812b.clear();
+  ws2812b.show();
 }
 
 void connectToWifi() {
