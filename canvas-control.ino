@@ -17,23 +17,24 @@
 #define NUM_PIXELS 10
 
 WebThingAdapter *adapter;
-const char *canvasTypes[] = {"Light", "ColorControl", nullptr};
+const char *canvasTypes[] = {"OnOffSwitch", "Light", nullptr};
 ThingDevice canvas("urn:michigan-ave:canvas-by-tae", "Anime Canvas", canvasTypes);
 
 Adafruit_NeoPixel ws2812b(NUM_PIXELS, LED_STRIP_PIN, NEO_GRB + NEO_KHZ800);
 
 //** Thing Properties Declarations */
-
 ThingProperty lightsOn("on", "Whether the canvas is in a static on state.", BOOLEAN, "OnOffProperty");
 bool lastOn = false;
+
+ThingProperty brightnessLevel("brightness", "Brightness of the LEDs", INTEGER, "BrightnessProperty");
 
 void setup() {
   // put your setup code here, to run once:
   pinMode(LED_BUILTIN, OUTPUT);
-  Serial.begin(9600);
+  // Serial.begin(921600);
   // while(!Serial) {
-  //   Serial.println("Serial connecting..."); // Wait for serial port to connect. Can't communicate otherwise?
-  //   delay(10);
+  //   Serial.println("Serial connecting..."); // Wait for serial port to connect
+  //   delay(1000);
   // }
 
   connectToWifi();
@@ -41,9 +42,17 @@ void setup() {
   adapter = new WebThingAdapter("led-lamp", WiFi.localIP());
 
   canvas.description = "The electric floating canvas";
+
   lightsOn.title = "Light Strip";
 
+  brightnessLevel.title = "Brightness";
+  brightnessLevel.minimum = 1;
+  brightnessLevel.maximum = 100;
+  brightnessLevel.unit = "percent";
+
+
   canvas.addProperty(&lightsOn);
+  canvas.addProperty(&brightnessLevel);
   
   adapter->addDevice(&canvas);
   adapter->begin();
@@ -60,6 +69,9 @@ void setup() {
   // Call this because we called setValue
   (void)lightsOn.changedValueOrNull();
 
+  ThingPropertyValue initialBrightness = {.integer = 100};
+  brightnessLevel.setValue(initialBrightness);
+  (void)brightnessLevel.changedValueOrNull();
 
   ws2812b.begin();
   ws2812b.clear();
@@ -71,12 +83,12 @@ void loop() {
   adapter->update();
 
   bool on = lightsOn.getValue().boolean;
-
-    if (on) {
+  if (on) {
     turnStripOn();
-    } else {
-      turnStripOff();
-    }
+  } else {
+    turnStripOff();
+  }
+
 }
 
 void turnStripOn() {
