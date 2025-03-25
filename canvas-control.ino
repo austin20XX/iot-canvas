@@ -1,4 +1,4 @@
-#define ARDUINO_UNO
+#define LARGE_JSON_BUFFERS 1
 
 #include "wifi_secrets.h"
 #include <WiFiNINA.h>
