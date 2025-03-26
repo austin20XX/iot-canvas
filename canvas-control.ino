@@ -83,16 +83,17 @@ void loop() {
   adapter->update();
 
   bool on = lightsOn.getValue().boolean;
+  int brightness = brightnessLevel.getValue().integer;
   if (on) {
-    turnStripOn();
+    turnStripOn(brightness);
   } else {
     turnStripOff();
   }
 
 }
 
-void turnStripOn() {
-  ws2812b.fill(ws2812b.Color(127,127,127), 0, NUM_PIXELS);
+void turnStripOn(uint8_t b) {
+  ws2812b.fill(ws2812b.Color(b,b,b), 0, NUM_PIXELS);
   ws2812b.show();
 }
 
