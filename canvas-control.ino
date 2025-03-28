@@ -84,12 +84,18 @@ void loop() {
 
   bool on = lightsOn.getValue().boolean;
   int brightness = brightnessLevel.getValue().integer;
-  if (on) {
+  if (on && !lastOn) {
+    // Turn on from previously off state
     turnStripOn(brightness);
-  } else {
+  } else if (!on && lastOn) {
+    // Turn off from previously on state
     turnStripOff();
   }
 
+  // Update lastOn
+  if(lastOn != on) {
+    lastOn = on;
+  }
 }
 
 void turnStripOn(uint8_t b) {
