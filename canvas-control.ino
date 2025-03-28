@@ -31,7 +31,7 @@ ThingProperty brightnessLevel("brightness", "Brightness of the LEDs", INTEGER, "
 void setup() {
   // put your setup code here, to run once:
   pinMode(LED_BUILTIN, OUTPUT);
-  // Serial.begin(921600);
+  Serial.begin(921600);
   // while(!Serial) {
   //   Serial.println("Serial connecting..."); // Wait for serial port to connect
   //   delay(1000);
@@ -83,10 +83,9 @@ void loop() {
   adapter->update();
 
   bool on = lightsOn.getValue().boolean;
-  int brightness = brightnessLevel.getValue().integer;
-  if (on && !lastOn) {
-    // Turn on from previously off state
-    turnStripOn(brightness);
+  if (on && (!lastOn || brightnessLevel.changedValueOrNull()) ) {
+    // Turn on if was previously in off state, or brightness has changed
+    turnStripOn(brightnessLevel.getValue().integer);
   } else if (!on && lastOn) {
     // Turn off from previously on state
     turnStripOff();
@@ -98,7 +97,8 @@ void loop() {
   }
 }
 
-void turnStripOn(uint8_t b) {
+void turnStripOn(uint8_t percentBrightness) {
+  int b = map(percentBrightness, 0, 100, 10, 127);
   ws2812b.fill(ws2812b.Color(b,b,b), 0, NUM_PIXELS);
   ws2812b.show();
 }
