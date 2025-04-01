@@ -6,13 +6,6 @@
 #include <WebThingAdapter.h>
 #include <Adafruit_NeoPixel.h>
 
-// PORT DEFINITIONS
-#define SPIWIFI         SPI
-#define AIRLIFT_CS      10 // Chip select gpio
-#define AIRLIFT_BUSY    7
-#define AIRLIFT_RESET   5
-#define AIRLIFT_GPIO0   -1 // Not connected
-
 #define LED_STRIP_PIN 2
 #define NUM_PIXELS 10
 
@@ -110,9 +103,6 @@ void turnStripOff() {
 
 void connectToWifi() {
     digitalWrite(LED_BUILTIN, HIGH);
-  // This is an added function in the Adafruit WiFiNINA library
-  // Needed ofc because the wifi is coming from a breakout
-  WiFi.setPins(AIRLIFT_CS, AIRLIFT_BUSY, AIRLIFT_RESET, AIRLIFT_GPIO0, &SPIWIFI);
 
   // WL_NO_MODULE and WL_NO_SHIELD are equivalent
   while(WiFi.status() == WL_NO_MODULE) {
