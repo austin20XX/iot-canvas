@@ -110,7 +110,6 @@ void connectToWifi() {
     delay(500);
   }
 
-  // There is also a string data type. As well as String class
   // Arduino frowns on the 'new' and other dynamic allocations, because it can eventually lead to memory fragmentation 
   // Making the memory unstable and eventually unusable; causing program to fail
   char wifi_ssid[] = WIFI_SSID;

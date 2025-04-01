@@ -26,6 +26,11 @@
   When a program is monitoring the serial port of the device, uploads fail. Commonly happens to me when I'm listening through VS Code Serial Monitor, just stop monitoring to fix.
   Waiting for Serial connection hangs your code when not connected to a PC (or any device with serial connection). Solution I think could be #ifndef WAIT_FOR_SERIAL macro? Allow for easy switching in and out instead of commenting out code
 
+  USING STRINGS WITH ARDUINO
+    Typically frowned upon to use the String object, because it can lead to heap fragmentation since it uses dynamic memory allocation. Using C character array 'strings' is preferred instead. Use n versions of str functions (such as strncpy vs strcpy) to prevent buffer overflow attacks, because you'll only write the intended amount of memory
+    char *string = "This is text"; Intended to be read only, might misbehave if modified. Size is 13 chars
+    char string[] = "This is text"; Intended to be writable. Size is 13 chars
+    char string[30] = "This is text"; Writable, size is 30 chars
 
 ## Board Notes
   Adafruit Feather M0 SAMD21 will use Wifi101 Adapter, but WiFiNina library (M0 processor, ATWINC 1500 wifi chip)
