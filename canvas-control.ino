@@ -39,7 +39,7 @@ void setup() {
 
   connectToWifi();
 
-  adapter = new WebThingAdapter("led-lamp", WiFi.localIP());
+  adapter = new WebThingAdapter("floating-canvas", WiFi.localIP());
 
   canvas.description = "The electric floating canvas";
 
